@@ -1,0 +1,6 @@
+# maps an array of city locations [id, city, url]
+# when zoomed into state level, cities become clickable[url] on (both the title and the dot)
+# when state is selected on dropdown, map zooms into state level
+# when state is clicked on, dropdown reflects the change
+
+(more details in todo.png)
