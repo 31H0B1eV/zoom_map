@@ -30,16 +30,16 @@
 
 <select>
 	<option value="default">Select a state</option>
-	<option value="AL">Alabama</option>
-	<option value="AK">Alaska</option>
-	<option value="AZ">Arizona</option>
-	<option value="AR">Arkansas</option>
-	<option value="CA">California</option>
-	<option value="CO">Colorado</option>
-	<option value="CT">Connecticut</option>
-	<option value="DE">Delaware</option>
-	<option value="DC">District Of Columbia</option>
-	<option value="FL">Florida</option>
+	<option value="AL,-848.5821533203125,-388.7515869140625">Alabama</option>
+	<option value="AK,-1264.1025390625,-532.143798828125">Alaska</option>
+	<option value="AZ,-926.55810546875,-700.1901245117188">Arizona</option>
+	<option value="AR,-581.485595703125,-630.6588745117188">Arkansas</option>
+	<option value="CA,-244.48931884765625,59.913787841796875">California</option>
+	<option value="CO,-172.9339599609375,-187.32257080078125">Colorado</option>
+	<option value="CT,-105.43365478515625,-694.4683837890625">Connecticut</option>
+	<option value="DE,-519.8311157226562,-1004.7313232421875">Delaware</option>
+	<option value="DC,-857.513671875,-1040.746337890625">District Of Columbia</option>
+	<option value="FL,-2361.0654296875,-1442.0916748046875">Florida</option>
 	<option value="GA">Georgia</option>
 	<option value="HI">Hawaii</option>
 	<option value="ID">Idaho</option>
@@ -128,6 +128,7 @@ d3.json("us.json", function(error, us) {
 });
 
 function clicked(d) {
+	console.log(d);
   var x, y, k;
 
   if (d && centered !== d) {
@@ -153,8 +154,14 @@ function clicked(d) {
 }
 
 $('select').on('change', function() {
-	console.log(this.value);
-	// clicked(this.value);
+	var path = this.value.split(',');
+	var scale = 4;
+
+	g.transition()
+		.duration(1000)
+		.attr("transform", "translate(" + path[1] +','+ path[2] + ")scale(" + scale +','+ scale + ")");
+
+
 });
 
 </script>
