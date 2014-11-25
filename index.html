@@ -159,9 +159,13 @@ $('select').on('change', function() {
 
 	g.transition()
 		.duration(1000)
-		.attr("transform", "translate(" + path[1] +','+ path[2] + ")scale(" + scale +','+ scale + ")");
+		.attr("transform", "translate(" + path[1] +','+ path[2] + ")scale(" + scale +','+ scale + ")")
+			.classed('active', true);
 
 	// need add data from us.json into options and get this object value after select.
+	// for change color in active path it must have centered property or just add class='active'
+	// in any case i need get path object after option selected and for this option value must contain path data
+	// about state from us.json.
 
 });
 
