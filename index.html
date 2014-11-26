@@ -18,13 +18,13 @@
   fill: orange;
 }
 
-select {
-	background-color: #efefef;
-	z-index: 999999;
-	margin-top: 5px;
-	position: absolute;
-	right:10%;
-}
+/*select {*/
+	/*background-color: #efefef;*/
+	/*z-index: 999999;*/
+	/*margin-top: 5px;*/
+	/*position: absolute;*/
+	/*right:10%;*/
+/*}*/
 
 #state-borders {
   fill: none;
@@ -37,7 +37,7 @@ select {
 
 </style>
 </head><body>
-
+<div id="body"></div>
 <br />
 
 <script src="js/d3.js"></script>
@@ -45,12 +45,14 @@ select {
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 <script>
 
+var obj = {};
+
 var width = 960,
     height = 500,
     centered;
 
 var projection = d3.geo.albersUsa()
-    .scale(1070)
+    .scale(800)
     .translate([width / 2, height / 2]);
 
 var path = d3.geo.path()
@@ -82,12 +84,13 @@ d3.json("us_states.json", function(error, us) {
       .attr("id", "state-borders")
       .attr("d", path);
 
-	var select = d3.select('body').append('select');
+	var select = d3.select('#body').append('select');
 	select.append('option')
 			.attr('value', 'default')
 			.text('Select a state');
 
-	for(var i=1; i < topojson.feature(us, us.objects.subunits).features.length; i++) {
+	for(var i=0; i < topojson.feature(us, us.objects.subunits).features.length; i++) {
+        obj[topojson.feature(us, us.objects.subunits).features[i].properties.name.toString()] = topojson.feature(us, us.objects.subunits).features[i];
 		var item = topojson.feature(us, us.objects.subunits).features[i].properties.name.toString();
 		select.append('option')
 				.attr('value', item)
@@ -96,7 +99,6 @@ d3.json("us_states.json", function(error, us) {
 });
 
 function clicked(d) {
-	console.log(d);
   var x, y, k;
 
   if (d && centered !== d) {
@@ -124,7 +126,11 @@ function clicked(d) {
 </script>
 <script>
     $(document).on('click', 'select', function() {
-        console.log(this.value);
+        if(this.value in obj){
+            var d = obj[this.value];
+
+            clicked(d);
+        }
     });
 </script>
 </body></html>
