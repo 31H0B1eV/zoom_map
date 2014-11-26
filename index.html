@@ -115,7 +115,9 @@ function clicked(d) {
   }
 
   g.selectAll("path")
-      .classed("active", centered && function(d) { return d === centered; });
+      .classed("active", function(d) {
+              return centered === d;
+          });
 
   g.transition()
       .duration(3000)
@@ -130,6 +132,11 @@ function clicked(d) {
             var d = obj[this.value];
 
             clicked(d);
+
+            g.selectAll("path")
+                    .classed("active", function(d) {
+                        return centered ? true : false;
+                    });
         }
     });
 </script>
