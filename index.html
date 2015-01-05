@@ -143,6 +143,8 @@ function clicked(d) {
     centered = null;
   }
 
+  $('select').prop('selected', $('select').val(d.properties.name));
+
   g.selectAll("path")
       .classed("active", function(d) {
               return centered === d;
