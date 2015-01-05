@@ -182,8 +182,9 @@ function clicked(d) {
                     .attr('class', 'labels');
         });
     } else {
-        $(".cities").remove();
+//        $(".cities").remove();
         $(".labels").remove();
+        $('select').prop('selectedIndex', 0);
     }
 }
 
