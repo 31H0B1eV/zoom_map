@@ -43,6 +43,7 @@
 <script src="js/d3.js"></script>
 <script src="js/topojson.js"></script>
 <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+
 <script>
 
 var obj = {};
@@ -79,22 +80,28 @@ d3.json("us_states.json", function(error, us) {
       .attr("d", path)
       .on("click", clicked);
 
+//    var p = topojson.feature(us, us.objects.subunits).features;
+//    for(var j=0; j < p.length; j++) {
+//
+//        console.log(p[j].properties.name);
+//    }
+
   g.append("path")
       .datum(topojson.mesh(us, us.objects.subunits, function(a, b) { return a !== b; }))
       .attr("id", "state-borders")
       .attr("d", path);
 
-	var select = d3.select('#body').append('select');
+	var select = d3.select('#body').append('select').attr('id', 'city');
 	select.append('option')
 			.attr('value', 'default')
 			.text('Select a state');
 
 	for(var i=0; i < topojson.feature(us, us.objects.subunits).features.length; i++) {
-        obj[topojson.feature(us, us.objects.subunits).features[i].properties.name.toString()] = topojson.feature(us, us.objects.subunits).features[i];
+    obj[topojson.feature(us, us.objects.subunits).features[i].properties.name.toString()] = topojson.feature(us, us.objects.subunits).features[i];
 		var item = topojson.feature(us, us.objects.subunits).features[i].properties.name.toString();
 		select.append('option')
-				.attr('value', item)
-				.text(item);
+              .attr('value', item)
+              .text(item);
 	}
 });
 
@@ -120,23 +127,28 @@ function clicked(d) {
           });
 
   g.transition()
-      .duration(3000)
+      .duration(1000)
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", 1.5 / k + "px");
 }
 
 </script>
 <script>
-    $(document).on('click', 'select', function() {
+    $(document).on('click', 'select', function(e) {
         if(this.value in obj){
             var d = obj[this.value];
-
             clicked(d);
 
-            g.selectAll("path")
-                    .classed("active", function(d) {
-                        return centered ? true : false;
+            var p = g.selectAll("path");
+            for(var i = 0; i < p.length; i++) {
+                try {
+                    p.classed("active", function(d) {
+                        return centered.properties.name === d.properties.name;
                     });
+                } catch (e) {
+                    //console.log(e);
+                }
+            }
         }
     });
 </script>
