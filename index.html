@@ -34,7 +34,9 @@
   stroke-linecap: round;
   pointer-events: none;
 }
-
+#name {
+    font-size: 3em;
+}
 #map {
     display:block;
     width:900px;
@@ -58,6 +60,7 @@
 </style>
 </head><body>
 <div id="body"></div>
+<div id="name"></div>
 <br />
 
 <script src="js/d3.js"></script>
@@ -99,6 +102,10 @@ d3.json("us_states.json", function(error, us) {
     .enter().append("path")
       .attr("d", path)
       .on("click", clicked);
+//      .on('mouseover', function(d) {
+//          var name = d.properties.name;
+//          return document.getElementById('name').innerHTML=name;
+//      });
 
   g.append("path")
       .datum(topojson.mesh(us, us.objects.subunits, function(a, b) { return a !== b; }))
@@ -118,33 +125,6 @@ d3.json("us_states.json", function(error, us) {
               .text(item);
 	}
 
-});
-
-d3.json("cities_usa.json", function(error, cities) {
-    console.log(cities);
-    svg.selectAll('.cities')
-            .data(cities.features).enter().append('path')
-            .attr('d', path.pointRadius(2))
-            .attr('class', 'cities');
-    svg.selectAll('.labels')
-            .data(cities.features).enter().append('text')
-            .attr('transform', function(d) {
-                return 'translate(' + projection(d.geometry.coordinates) + ')';
-            })
-            .attr('dy', function(d){ // vertical offset
-                var city = d.properties.NAME;
-                if (city == 'Washington') {
-                    return 8;
-                }
-                else {
-                    return -3;
-                }
-            })
-            .attr('dx', 3) // horizontal offset
-            .text(function(d) {
-                return d.properties.NAME;
-            })
-            .attr('class', 'labels');
 });
 
 function clicked(d) {
@@ -172,6 +152,39 @@ function clicked(d) {
       .duration(1000)
       .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
       .style("stroke-width", 1.5 / k + "px");
+
+
+
+    if(centered !== null) {
+        d3.json("cities_usa.json", function(error, cities) {
+            g.selectAll('.cities')
+                    .data(cities.features).enter().append('path')
+                    .attr('d', path.pointRadius(3))
+                    .attr('class', 'cities');
+            g.selectAll('.labels')
+                    .data(cities.features).enter().append('text')
+                    .attr('transform', function(d) {
+                        return 'translate(' + projection(d.geometry.coordinates) + ')';
+                    })
+                    .attr('dy', function(d){ // vertical offset
+                        var city = d.properties.NAME;
+                        if (city == 'Washington') {
+                            return 8;
+                        }
+                        else {
+                            return -3;
+                        }
+                    })
+                    .attr('dx', 3) // horizontal offset
+                    .text(function(d) {
+                        return d.properties.NAME;
+                    })
+                    .attr('class', 'labels');
+        });
+    } else {
+        $(".cities").remove();
+        $(".labels").remove();
+    }
 }
 
 </script>
